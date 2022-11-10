@@ -1,8 +1,18 @@
 package service;
 
 import java.util.Scanner;
+import java.util.*;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
+
 import java.io.File;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.List;
+
 import dao.UsuarioDAO;
 import model.Usuario;
 import spark.Request;
@@ -159,6 +169,7 @@ public class UsuarioService {
 		String email = request.queryParams("email");
 		String senha = request.queryParams("senha");
 		
+		
 		String resp = "";
 		
 		Usuario usuario = new Usuario(-1, email, nomeUsuario, senha, primeiroNome, sobrenome);
@@ -198,6 +209,43 @@ public class UsuarioService {
 		return form;
 	}
 
+@SuppressWarnings("unchecked")
+public static String login(Request request) {
+		
+		String login = request.params(":login");
+		String senha = request.params(":senha");
+		JSONArray jsonArray = new JSONArray();
+
+		
+			UsuarioDAO usuarioDao = new UsuarioDAO();
+			usuarioDao.conectar();
+			Usuario usuario;
+			try {
+				usuario = usuarioDao.login(login,senha);
+			
+			
+			
+			if(usuario.getIdUsuario()>0) {
+				JSONObject usuarioJsonObj = new JSONObject();
+				usuarioJsonObj.put("id",usuario.getIdUsuario());
+				usuarioJsonObj.put("login",usuario.getNomeUsuario());
+				usuarioJsonObj.put("primeironome",usuario.getPrimeiroNome());
+				usuarioJsonObj.put("sobrenome",usuario.getSobrenome());
+				usuarioJsonObj.put("senha",usuario.getSenha());
+				usuarioJsonObj.put("email",usuario.getEmail());
+
+				jsonArray.add(usuarioJsonObj);
+			}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+		
+		return jsonArray.toJSONString();
+		
+	}
+	
 	
 	public Object getToUpdate(Request request, Response response) {
 		int idUsuario = Integer.parseInt(request.params(":idUsuario"));		

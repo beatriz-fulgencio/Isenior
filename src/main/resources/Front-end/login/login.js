@@ -100,32 +100,32 @@ function initLoginApp () {
 
 
 // // Verifica se o login do usuário está ok e, se positivo, direciona para a página inicial
-// function loginUser (login, senha) {
+function loginUser (login, senha) {
     
-//     // Verifica todos os itens do banco de dados de usuarios 
-//     // para localizar o usuário informado no formulario de login
-//     for (var i = 0; i < db_usuarios.usuarios.length; i++) {
-//         var usuario = db_usuarios.usuarios[i];
+    // Verifica todos os itens do banco de dados de usuarios 
+    // para localizar o usuário informado no formulario de login
+    for (var i = 0; i < db_usuarios.usuarios.length; i++) {
+        var usuario = db_usuarios.usuarios[i];
         
-//         // Se encontrou login, carrega usuário corrente e salva no Session Storage
-//         if (login == usuario.login && senha == usuario.senha) {
-//             usuarioCorrente.id = usuario.id;
-//             usuarioCorrente.login = usuario.login;
-//             usuarioCorrente.email = usuario.email;
-//             usuarioCorrente.nome = usuario.nome;
-//             usuarioCorrente.adm = usuario.adm;
+        // Se encontrou login, carrega usuário corrente e salva no Session Storage
+        if (login == usuario.login && senha == usuario.senha) {
+            usuarioCorrente.id = usuario.id;
+            usuarioCorrente.login = usuario.login;
+            usuarioCorrente.email = usuario.email;
+            usuarioCorrente.nome = usuario.nome;
+            usuarioCorrente.adm = usuario.adm;
             
-//             // Salva os dados do usuário corrente no Session Storage, mas antes converte para string
-//             sessionStorage.setItem ('usuarioCorrente', JSON.stringify (usuarioCorrente));
+            // Salva os dados do usuário corrente no Session Storage, mas antes converte para string
+            sessionStorage.setItem ('usuarioCorrente', JSON.stringify (usuarioCorrente));
 
-//             // Retorna true para usuário encontrado
-//             return true;
-//         }
-//     }
+            // Retorna true para usuário encontrado
+            return true;
+        }
+    }
 
-//     // Se chegou até aqui é por que não encontrou o usuário e retorna falso
-//     return false;
-// }
+    // Se chegou até aqui é por que não encontrou o usuário e retorna falso
+    return false;
+}
 
 // Apaga os dados do usuário corrente no sessionStorage
 function logoutUser () {

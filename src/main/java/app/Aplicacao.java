@@ -3,6 +3,7 @@ package app;
 import static spark.Spark.*;
 
 import service.*;
+import spark.Filter;
 
 
 public class Aplicacao {
@@ -15,6 +16,12 @@ public class Aplicacao {
 	
     public static void main(String[] args) {
         port(6789);
+        
+        //after((Filter) (request,response) -> {
+		//	response.header("Access-Control-Allow-Origin","*");
+		//	response.header("Access-Control-Allow-Methods", "GET");
+		//	response.header("Access-Control-Allow-Methods", "POST");
+		//});
         
         staticFiles.location("/public");
  

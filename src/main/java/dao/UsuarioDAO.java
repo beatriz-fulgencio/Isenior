@@ -1,14 +1,17 @@
 package dao;
 
+
 import model.Usuario;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
 
 public class UsuarioDAO extends DAO {	
 	public UsuarioDAO() {
@@ -22,9 +25,16 @@ public class UsuarioDAO extends DAO {
 	}
 	
 	
-	public boolean insert(Usuario usuario) {
+	public boolean insert(Usuario usuario)  {
 		boolean status = false;
 		try {
+			
+			String senha = usuario.getSenha();
+			MessageDigest m=MessageDigest.getInstance("MD5");
+			m.update(senha.getBytes(),0,senha.length());
+			String senhaMD5 = new BigInteger(1,m.digest()).toString(64);
+			usuario.setSenha(senhaMD5);
+			
 			String sql = "INSERT INTO usuario (email, senha, sobrenome, nomeusuario, primeironome) "
 		               + "VALUES ('" + usuario.getEmail() + "', '"
 		               + usuario.getSenha() + "', '" + usuario.getSobrenome() + "', '" + usuario.getNomeUsuario() + 
@@ -35,6 +45,9 @@ public class UsuarioDAO extends DAO {
 			status = true;
 		} catch (SQLException u) {  
 			throw new RuntimeException(u);
+		}
+		catch(Exception e) {
+			System.out.println(e.getMessage());
 		}
 		return status;
 	}
@@ -80,6 +93,37 @@ public class UsuarioDAO extends DAO {
 		return get("primeiroNome");		
 	}
 	
+	public Usuario login(String login,String senha) throws Exception {
+		Usuario usuario = new Usuario();
+		
+		try {
+			
+			MessageDigest m=MessageDigest.getInstance("MD5");
+			m.update(senha.getBytes(),0,senha.length());
+			String senhaMD5 = new BigInteger(1,m.digest()).toString(64);
+			System.out.println("MD5: "+ senhaMD5 + " len: " + senhaMD5.length());
+			
+			String query = "SELECT * FROM usuario WHERE login= ? AND senha= ?";
+			PreparedStatement st = conexao.prepareStatement(query);
+			st.setString(1,login);
+			st.setString(2, senhaMD5);
+			ResultSet rs = st.executeQuery();
+			if(rs.next()) {
+				usuario = new Usuario(rs.getInt("idusuario"),rs.getString("email"),
+						rs.getString("nomeusuario"), rs.getString("senha"), rs.getString("primeironome"), rs.getString("sobrenome"));		//Inserir parametros
+			}
+			
+			st.close();
+		} catch(SQLException e) {
+			throw new RuntimeException(e);
+		}
+		if(usuario.getNomeUsuario().equals("nomeusuario")) {
+			throw new Exception("Email ou senha incorretos");
+		}
+		return usuario;
+	}
+
+
 	
 	private List<Usuario> get(String orderBy) {
 		List<Usuario> usuarios = new ArrayList<Usuario>();
