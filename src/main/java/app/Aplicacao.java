@@ -3,7 +3,6 @@ package app;
 import static spark.Spark.*;
 
 import service.*;
-import spark.Filter;
 
 
 public class Aplicacao {
@@ -11,7 +10,8 @@ public class Aplicacao {
 	private static UsuarioService usuarioService = new UsuarioService();
 	private static FaqService faqService = new FaqService();
 	private static ArtigoService artigoService = new ArtigoService();
-	
+	private static ServiceInicio service = new ServiceInicio();
+
 
 	
     public static void main(String[] args) {
@@ -25,8 +25,8 @@ public class Aplicacao {
         
         staticFiles.location("/public");
  
-        
-        get("/", (request, response) -> artigoService.getHome());
+ 
+        get("/", (request, response) -> service.getHome());
         
         get("/artigo", (request, response) -> artigoService.getHome());
         
