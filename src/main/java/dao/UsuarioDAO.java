@@ -57,9 +57,12 @@ public class UsuarioDAO extends DAO {
 		Usuario usuario = null;
 		
 		try {
-			Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
-			String sql = "SELECT * FROM usuario WHERE idusuario = " + idUsuario;
-			ResultSet rs = st.executeQuery(sql);	
+			//Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+			String query = "SELECT * FROM usuario WHERE idusuario = ?";
+			PreparedStatement st = conexao.prepareStatement(query);
+			st.setInt(1,idUsuario);
+			//String sql = "SELECT * FROM usuario WHERE idusuario = " + idUsuario;
+			ResultSet rs = st.executeQuery(query);	
 	        if(rs.next()){            
 	        	 usuario = new Usuario(rs.getInt("idUsuario"), rs.getString("email"), rs.getString("nomeUsuario"), 
 	                				   rs.getString("senha"), 

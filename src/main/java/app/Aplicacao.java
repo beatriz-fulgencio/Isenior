@@ -23,10 +23,10 @@ public class Aplicacao {
 		//	response.header("Access-Control-Allow-Methods", "POST");
 		//});
         
-        staticFiles.location("/public");
+        staticFiles.location("/Front-end");
  
  
-        get("/", (request, response) -> service.getHome());
+        get("/paginaadmin", (request, response) -> service.getHome());
         
         get("/artigo", (request, response) -> artigoService.getHome());
         

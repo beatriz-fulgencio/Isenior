@@ -177,7 +177,7 @@ function  validaAdm(adm) {
         let btnAdm = document.getElementById('btnAdm');
         btnAdm.innerHTML += `
         <li class="nav-li-item nav-item nav-button">
-            <a class="link" href="../administrador.html">ADMTESTE</a>
+            <a class="link" href="http://localhost:6789/paginaadmin">ADMTESTE</a>
         </li>
     `  
     let faq = document.querySelector('.cadastrofaq');
